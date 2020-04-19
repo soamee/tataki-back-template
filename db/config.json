@@ -1,0 +1,46 @@
+{
+  "development": {
+    "username": "vendor",
+    "password": "test",
+    "database": "vendordev",
+    "host": "localhost",
+    "port": 5432,
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "vendor",
+    "password": "test",
+    "database": "vendortest",
+    "host": "localhost",
+    "port": 5433,
+    "dialect": "postgres"
+  },
+  "staging": {
+    "username": "amazonvendor",
+    "password": "jja88aywhnsnqkdji-.qwi",
+    "database": "amazonvendor",
+    "host": "amazon-vendor.czhnxpyg6i7x.eu-west-2.rds.amazonaws.com",
+    "dialect": "postgres",
+    "port": 5432,
+    "ssl": true,
+    "dialectOptions": {
+      "ssl": {
+        "require": true
+      }
+    }
+  },
+  "production": {
+    "username": "amazonvendor",
+    "password": "jja88aywhnsnqkdji-.qwi",
+    "database": "amazonvendor",
+    "port": 5432,
+    "host": "amazon-vendor.czhnxpyg6i7x.eu-west-2.rds.amazonaws.com",
+    "dialect": "postgres",
+    "ssl": true,
+    "dialectOptions": {
+      "ssl": {
+        "require": true
+      }
+    }
+  }
+}

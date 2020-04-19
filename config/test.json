@@ -1,0 +1,5 @@
+{
+  "ENVIRONMENT": "test",
+  "SHOW_MODEL_ASSOCIATIONS": false,
+  "DATABASE_LOGGING_ENABLED": false
+}

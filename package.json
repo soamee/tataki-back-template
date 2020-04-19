@@ -1,0 +1,95 @@
+{
+  "name": "covid19",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start:dev": "cross-env NODE_ENV=development nodemon LOG_LEVEL=debug ./bin/www | pino-colada",
+    "start:test": "cross-env NODE_ENV=test nodemon LOG_LEVEL=debug ./bin/www | pino-colada",
+    "start:staging": "cross-env NODE_ENV=staging nodemon LOG_LEVEL=debug ./bin/www | pino-colada",
+    "start:production": "cross-env NODE_ENV=production nodemon LOG_LEVEL=debug ./bin/www | pino-colada",
+    "db:start": "docker run -e POSTGRES_USER=vendor -e POSTGRES_DB=vendordev -e POSTGRES_PASSWORD=test -e ALLOW_IP_RANGE=0.0.0.0/0 -v $(pwd)/pgdata:/var/lib/postgresql/data -ti -p 5432:5432 postgres",
+    "db:start:test": "docker run -e POSTGRES_USER=vendor -e POSTGRES_DB=vendortest -e POSTGRES_PASSWORD=test -e ALLOW_IP_RANGE=0.0.0.0/0 -ti -p 5433:5432 postgres",
+    "db:migrate": "NODE_ENV=development sequelize-cli db:migrate",
+    "db:migrate:test": "cross-env NODE_ENV=test sequelize-cli db:migrate",
+    "db:migrate:reset": "sequelize-cli db:migrate:undo:all && npm run db:migrate",
+    "db:migrate:undo:test": "cross-env NODE_ENV=test sequelize-cli db:migrate:undo:all",
+    "db:migrate:reset:test": "cross-env NODE_ENV=test npm run db:migrate:undo:test && npm run db:migrate:test",
+    "db:seed:dev": "sequelize-cli db:seed:all",
+    "db:seed:test": "cross-env NODE_ENV=test sequelize-cli db:seed:all",
+    "test": "cross-env NODE_ENV=test jest --runInBand --detectOpenHandles",
+    "pretest": "npm run db:migrate:reset:test",
+    "test:watch": "cross-env NODE_ENV=test jest --watch",
+    "lint": "eslint \"./**/*.js\"",
+    "docker:build": ". ./ci/extract-version.sh && echo $VERSION && docker build -t $DOCKER_CONTAINER_NAME:$VERSION .",
+    "docker:build:patch": "npm version patch && git add . && git commit -m \"release(): patch version\" && source ./ci/extract-version.sh && echo $VERSION && docker build -t $DOCKER_CONTAINER_NAME:$VERSION .",
+    "docker:build:minor": "npm version minor && git add . && git commit -m \"release(): minor version\" && source ./ci/extract-version.sh && echo $VERSION && docker build -t $DOCKER_CONTAINER_NAME:$VERSION .",
+    "docker:build:major": "npm version major && git add . && git commit -m \"release(): major version\"  && source ./ci/extract-version.sh && echo $VERSION && docker build -t $DOCKER_CONTAINER_NAME:$VERSION .",
+    "docker:tag-and-push": "source ../ci/extract-version.sh && docker tag $DOCKER_CONTAINER_NAME:$VERSION jmanzanomorilla/$DOCKER_CONTAINER_NAME:$VERSION && docker push jmanzanomorilla/$DOCKER_CONTAINER_NAME:$VERSION",
+    "docker:run": "source ../ci/extract-version.sh && docker run -it -p 8080:80 $DOCKER_CONTAINER_NAME:$VERSION",
+    "docker:release:patch": "yarn docker:build:patch && yarn docker:tag-and-push"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm test"
+    }
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  },
+  "dependencies": {
+    "@hapi/joi": "^15.1.0",
+    "bcrypt": "^4.0.1",
+    "cookie-parser": "~1.4.5",
+    "cross-env": "^7.0.2",
+    "debug": "^4.1.1",
+    "express": "~4.17.1",
+    "express-pino-logger": "^4.0.0",
+    "express-rate-limit": "^5.1.1",
+    "helmet": "^3.22.0",
+    "http-errors": "^1.7.3",
+    "http-status-codes": "^1.4.0",
+    "jade": "^1.11.0",
+    "joi": "^14.3.1",
+    "jsonwebtoken": "^8.5.1",
+    "module-alias": "^2.2.2",
+    "nodemon": "^2.0.3",
+    "pg": "^8.0.2",
+    "pg-hstore": "^2.3.3",
+    "pino": "^6.2.0",
+    "pino-colada": "^1.6.1",
+    "pino-pretty": "^4.0.0",
+    "sequelize": "^5.21.6",
+    "sqlite3": "^4.1.1",
+    "underscore": "^1.10.2"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "child-process-promise": "^2.2.1",
+    "eslint": "6.8.0",
+    "eslint-config-airbnb": "18.1.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.3",
+    "eslint-plugin-security": "^1.4.0",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.1.6",
+    "prettier": "^1.18.2",
+    "supertest": "^4.0.2"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.json": [
+      "prettier --write",
+      "git add"
+    ]
+  }
+}
