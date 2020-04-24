@@ -1,5 +1,7 @@
 const express = require('express');
 
+const { INTERNAL_SERVER_ERROR } = require('http-status-codes');
+
 const logger = require('../../components/logger')({});
 const db = require('../../db');
 const createUsersService = require('./service');
@@ -17,7 +19,7 @@ router.get('/me', injectUser, (req, res) => {
     .then((user) => res.json(user))
     .catch((err) => {
       logger.error(err);
-      res.status(400).json(err);
+      res.status(INTERNAL_SERVER_ERROR).json(err);
     });
 });
 
@@ -27,9 +29,20 @@ router.get('/:id', (req, res) => {
     .then((user) => res.json(user))
     .catch((err) => {
       logger.error(err);
-      res.status(400).json(err);
+      res.status(INTERNAL_SERVER_ERROR).json(err);
     });
 });
+
+router.get('/:id/roles', (req, res) => {
+  usersService
+    .getRolesByUser({ id: req.params.id })
+    .then((roles) => res.json(roles))
+    .catch((err) => {
+      logger.error(err);
+      res.status(INTERNAL_SERVER_ERROR).json(err);
+    });
+});
+
 
 router.get('/', (req, res) => {
   const { email } = req.query;
@@ -38,7 +51,7 @@ router.get('/', (req, res) => {
     .then((users) => res.json(users))
     .catch((err) => {
       logger.error(err);
-      res.status(400).json(err);
+      res.status(INTERNAL_SERVER_ERROR).json(err);
     });
 });
 
@@ -48,7 +61,7 @@ router.post('/', (req, res) => {
     .then((user) => res.json(user))
     .catch((err) => {
       logger.error(err);
-      res.status(400).json(err);
+      res.status(INTERNAL_SERVER_ERROR).json(err);
     });
 });
 
@@ -62,7 +75,7 @@ router.put('/:id', (req, res) => {
     .then((role) => res.json(role))
     .catch((error) => {
       logger.error(error);
-      res.status(400).json(error);
+      res.status(INTERNAL_SERVER_ERROR).json(error);
     });
 });
 

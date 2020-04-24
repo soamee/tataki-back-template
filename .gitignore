@@ -61,3 +61,7 @@ typings/
 .next
 
 pgdata/
+
+#tests
+reports
+jest_html_reporters.html

@@ -1,5 +1,5 @@
 const supertest = require('supertest');
-const { OK, BAD_REQUEST } = require('http-status-codes');
+const { OK, INTERNAL_SERVER_ERROR } = require('http-status-codes');
 const app = require('../../../app');
 const db = require('../../../db');
 const seed = require('../../seed');
@@ -28,12 +28,14 @@ describe('Users', () => {
   });
 
   it('Creates user', async (done) => {
-    let response = await request.post('/users').send({
-      email: 'jmanza@soamee.com',
-      password: '121234',
-      firstName: 'Other',
-      lastName: 'Hey',
-    });
+    let response = await request
+      .post('/users')
+      .send({
+        email: 'jmanza@soamee.com',
+        password: '121234',
+        firstName: 'Other',
+        lastName: 'Hey',
+      });
     expect(response.status).toBe(OK);
     expect(response.body.email).toBe('jmanza@soamee.com');
 
@@ -47,7 +49,7 @@ describe('Users', () => {
     const response = await request
       .post('/users')
       .send({ password: '121234', firstName: 'Other', lastName: 'Hey' });
-    expect(response.status).toBe(BAD_REQUEST);
+    expect(response.status).toBe(INTERNAL_SERVER_ERROR);
     done();
   });
 

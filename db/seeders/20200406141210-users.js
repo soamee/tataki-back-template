@@ -3,6 +3,7 @@ module.exports = {
     'users',
     [
       {
+        id: 10000,
         firstName: 'Javier',
         lastName: 'Manzano',
         email: 'jmanzano@soamee.com',
@@ -12,6 +13,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
+        id: 10001,
         firstName: 'Irene',
         lastName: 'Mateo',
         email: 'imateo@soamee.com',

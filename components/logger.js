@@ -1,3 +1,12 @@
 const pino = require('pino');
 
-module.exports = ({ level = 'info' }) => pino({ level });
+/* eslint-disable */
+module.exports = ({ level = 'info' }) => (process.env.NODE_ENV === 'test' ?
+{
+  info: console.log,
+  warn: console.log,
+  debug: console.log,
+  error: console.error,
+} :
+pino({ level }));
+/* eslint-enable */

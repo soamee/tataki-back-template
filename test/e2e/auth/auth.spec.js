@@ -24,6 +24,22 @@ describe('Auth', () => {
     done();
   });
 
+  it('Login with non existent user', async () => {
+    const response = await request.post('/auth/login').send({
+      email: 'jmanzan@soamee.com',
+      password: '12341234',
+    });
+    expect(response.status).toBe(UNAUTHORIZED);
+  });
+
+  it('Login with incorrect password existent user', async () => {
+    const response = await request.post('/auth/login').send({
+      email: 'jmanzano@soamee.com',
+      password: '1234123',
+    });
+    expect(response.status).toBe(UNAUTHORIZED);
+  });
+
   it('Gets info from user', async (done) => {
     let response = await request.post('/auth/login').send({
       email: 'jmanzano@soamee.com',

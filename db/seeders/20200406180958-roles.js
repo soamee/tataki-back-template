@@ -1,14 +1,16 @@
 module.exports = {
   up: (queryInterface) => queryInterface.bulkInsert(
-    'roles',
+    'userroles',
     [
       {
-        userId: 1,
+        userId: 10000,
+        name: 'ADMIN',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        userId: 2,
+        userId: 10001,
+        name: 'REGULAR',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -16,5 +18,5 @@ module.exports = {
     {},
   ),
 
-  down: (queryInterface) => queryInterface.bulkDelete('roles', null, {}),
+  down: (queryInterface) => queryInterface.bulkDelete('userroles', null, {}),
 };

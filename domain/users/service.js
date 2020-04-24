@@ -124,11 +124,28 @@ module.exports = () => {
     }
   };
 
+  const getRolesByUser = async ({ id }) => {
+    try {
+      const user = await db.User.findOne({
+        where: { id },
+        include: { model: db.Role, as: 'roles' },
+      });
+      return user.roles;
+    } catch (err) {
+      const error = {
+        code: 'users.roles',
+        message: `Error while finding userMe ${err}`,
+      };
+      throw error;
+    }
+  };
+
   return {
     findById,
     create,
     findAll,
     update,
     findMe,
+    getRolesByUser,
   };
 };

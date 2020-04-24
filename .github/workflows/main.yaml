@@ -8,9 +8,9 @@ jobs:
       postgres:
         image: postgres:10.8
         env:
-          POSTGRES_USER: vendor
+          POSTGRES_USER: service
           POSTGRES_PASSWORD: test
-          POSTGRES_DB: vendortest
+          POSTGRES_DB: servicetest
         ports:
         - 5433:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5

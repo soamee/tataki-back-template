@@ -1,0 +1,22 @@
+version: '3'
+services:
+  postgres:
+    image: 'postgres'
+    container_name: 'postgres'
+    environment:
+      POSTGRES_PASSWORD: 'test'
+      POSTGRES_DB: 'servicedev'
+      POSTGRES_USER: 'service'
+      ALLOW_IP_RANGE: '0.0.0.0/0'
+    ports:
+      - '5432:5432'
+  postgresTest:
+    image: 'postgres'
+    container_name: 'postgresTest'
+    environment:
+      POSTGRES_PASSWORD: 'test'
+      POSTGRES_DB: 'servicetest'
+      POSTGRES_USER: 'service'
+      ALLOW_IP_RANGE: '0.0.0.0/0'
+    ports:
+      - '5433:5432'
