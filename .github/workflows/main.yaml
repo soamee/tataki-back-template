@@ -53,8 +53,8 @@ jobs:
           . ./ci/extract-version.sh
           echo ::set-env name=VERSION::$VERSION
           echo ::set-env name=DOCKER_CONTAINER_NAME::${{ secrets.DOCKER_CONTAINER_NAME }}
-      - name: Build Docker Image
-        run: npm run docker:build
+      # - name: Build Docker Image
+      #   run: npm run docker:build
       # - uses: jwalton/gh-ecr-push@v1.0.0
       #   name: Push to Amazon ECR
       #   with:
