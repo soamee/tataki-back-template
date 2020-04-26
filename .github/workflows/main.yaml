@@ -33,15 +33,6 @@ jobs:
       - name: Run test
         run: |
           npm run test
-      - uses: 8398a7/action-slack@v2
-        name: Integration tests - Notify slack
-        with:
-          status: ${{ job.status }}
-          author_name: Integration Test
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        if: always()
       - name: "Automated Version Bump"
         uses: "soamee/gh-action-conventional-commits@v8.0.0"
         with:
@@ -62,12 +53,12 @@ jobs:
       #     secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       #     region: eu-west-2
       #     image: ${{ secrets.DOCKER_CONTAINER_NAME }}:$VERSION
-      # - uses: 8398a7/action-slack@v2
-      #   name: Push to ECR - Notify slack
-      #   with:
-      #     status: ${{ job.status }}
-      #     author_name: Deploy to ECR
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      #   if: always()
+      - uses: 8398a7/action-slack@v2
+        name: Build process finished - Notify slack
+        with:
+          status: ${{ job.status }}
+          author_name: CI System
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: always()
