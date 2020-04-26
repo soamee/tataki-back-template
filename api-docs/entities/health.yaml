@@ -1,0 +1,19 @@
+Metadata:
+  type: object
+  required:
+    - name
+    - version
+    - uptime
+    - message
+    - timestamp
+  properties:
+    name:
+      type: string
+    version:
+      type: string
+    uptime:
+      type: string
+    message:
+      type: string
+    timestamp:
+      type: string

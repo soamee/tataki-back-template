@@ -1,0 +1,37 @@
+BaseUser:
+  type: object
+  required:
+    - firstName
+    - email
+  properties:
+    email:
+      type: string
+    firstName:
+      type: string
+    lastName:
+      type: string
+
+UserDetail:
+  allOf:
+    - type: object
+      properties:
+        id:
+          type: integer
+
+UsersList:
+  type: object
+  properties:
+    data:
+      type: array
+      items:
+        type: string
+    next:
+      type: integer
+
+Login:
+  type: object
+  properties:
+    email:
+      type: string
+    password:
+      type: string

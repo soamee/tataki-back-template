@@ -19,9 +19,11 @@ module.exports = () => {
     try {
       const users = await db.User.findAll({
         where,
-        include: { model: db.Role, as: 'roles' },
       });
-      return users;
+      return {
+        data: users,
+        next: 1,
+      };
     } catch (err) {
       const error = {
         code: 'users.findAll',
@@ -35,7 +37,6 @@ module.exports = () => {
     try {
       const user = await db.User.findOne({
         where: { id },
-        include: { model: db.Role, as: 'roles' },
       });
       return user;
     } catch (err) {
@@ -51,7 +52,6 @@ module.exports = () => {
     try {
       const userMe = await db.User.findOne({
         where: { id },
-        include: { model: db.Role, as: 'roles' },
       });
       return userMe;
     } catch (err) {
@@ -124,28 +124,11 @@ module.exports = () => {
     }
   };
 
-  const getRolesByUser = async ({ id }) => {
-    try {
-      const user = await db.User.findOne({
-        where: { id },
-        include: { model: db.Role, as: 'roles' },
-      });
-      return user.roles;
-    } catch (err) {
-      const error = {
-        code: 'users.roles',
-        message: `Error while finding userMe ${err}`,
-      };
-      throw error;
-    }
-  };
-
   return {
     findById,
     create,
     findAll,
     update,
     findMe,
-    getRolesByUser,
   };
 };

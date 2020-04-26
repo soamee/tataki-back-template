@@ -1,16 +1,24 @@
 const supertest = require('supertest');
 const { OK, UNAUTHORIZED } = require('http-status-codes');
-const app = require('../../../app');
+const createApp = require('../../../app');
 const db = require('../../../db');
 const seed = require('../../seed');
 const truncate = require('../../truncate');
 
-const request = supertest(app);
 
 describe('Auth', () => {
-  beforeEach(async () => {
-    await db.init();
+  let request;
+
+  beforeAll(async (done) => {
+    const app = await createApp();
+    request = supertest(app);
+    done();
+  });
+
+  beforeEach(async (done) => {
+    await db.initDatabase();
     await seed();
+    done();
   });
 
   it('Login with user', async (done) => {
@@ -24,20 +32,22 @@ describe('Auth', () => {
     done();
   });
 
-  it('Login with non existent user', async () => {
+  it('Login with non existent user', async (done) => {
     const response = await request.post('/auth/login').send({
       email: 'jmanzan@soamee.com',
       password: '12341234',
     });
     expect(response.status).toBe(UNAUTHORIZED);
+    done();
   });
 
-  it('Login with incorrect password existent user', async () => {
+  it('Login with incorrect password existent user', async (done) => {
     const response = await request.post('/auth/login').send({
       email: 'jmanzano@soamee.com',
       password: '1234123',
     });
     expect(response.status).toBe(UNAUTHORIZED);
+    done();
   });
 
   it('Gets info from user', async (done) => {

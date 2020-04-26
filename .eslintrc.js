@@ -17,6 +17,7 @@ module.exports = {
     afterEach: true,
     expect: true,
     jest: true,
+    beforeAll: true,
     afterAll: true,
   },
   rules: {

@@ -33,17 +33,6 @@ router.get('/:id', (req, res) => {
     });
 });
 
-router.get('/:id/roles', (req, res) => {
-  usersService
-    .getRolesByUser({ id: req.params.id })
-    .then((roles) => res.json(roles))
-    .catch((err) => {
-      logger.error(err);
-      res.status(INTERNAL_SERVER_ERROR).json(err);
-    });
-});
-
-
 router.get('/', (req, res) => {
   const { email } = req.query;
   usersService
@@ -72,7 +61,7 @@ router.put('/:id', (req, res) => {
   const { body } = req;
   usersService
     .update(id, body)
-    .then((role) => res.json(role))
+    .then((user) => res.json(user))
     .catch((error) => {
       logger.error(error);
       res.status(INTERNAL_SERVER_ERROR).json(error);

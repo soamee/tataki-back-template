@@ -1,29 +1,34 @@
 const supertest = require('supertest');
 const { OK, INTERNAL_SERVER_ERROR } = require('http-status-codes');
-const app = require('../../../app');
+const createApp = require('../../../app');
 const db = require('../../../db');
 const seed = require('../../seed');
 const truncate = require('../../truncate');
 
-const request = supertest(app);
-
 describe('Users', () => {
+  let request;
+  beforeAll(async (done) => {
+    const app = await createApp();
+    request = supertest(app);
+    done();
+  });
+
   beforeEach(async () => {
-    await db.init();
+    await db.initDatabase();
     await seed();
   });
 
   it('Get all users', async (done) => {
     const response = await request.get('/users');
     expect(response.status).toBe(OK);
-    expect(response.body).toHaveLength(2);
+    expect(response.body.data).toHaveLength(2);
     done();
   });
 
   it('Get filtered users', async (done) => {
     const response = await request.get('/users?email=jmanzano');
     expect(response.status).toBe(OK);
-    expect(response.body).toHaveLength(1);
+    expect(response.body.data).toHaveLength(1);
     done();
   });
 
@@ -41,7 +46,7 @@ describe('Users', () => {
 
     response = await request.get('/users');
     expect(response.status).toBe(OK);
-    expect(response.body).toHaveLength(3);
+    expect(response.body.data).toHaveLength(3);
     done();
   });
 

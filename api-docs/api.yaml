@@ -1,0 +1,72 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Swagger Petstore
+  description: Api for the Project
+  contact:
+    name: Soamee Studio SL
+    email: info@soamee.com
+    url: http://soamee.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+paths:
+  /users:
+    get:
+      description: Returns all uses
+      responses:
+        200:
+          description: User response
+          content:
+            application/json:
+              schema:
+                $ref: ./entities/users.yaml#/UsersList
+    post:
+      summary: Add a new pet
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./entities/users.yaml#/UsersList
+      responses:
+        '201':
+          description: Created
+  /users/{userId}:
+    delete:
+      description: deletes a single user based on the ID supplied
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: user deleted
+  /health:
+    get:
+      description: Health endpoint
+      responses:
+        200:
+          description: user deleted
+          content:
+            application/json:
+              schema:
+                $ref: ./entities/health.yaml#/Metadata
+  /auth/login:
+    post:
+      description: Login endpoint
+      requestBody:
+        description: User to lofin with
+        required: true
+        content:
+          application/json:
+            schema:
+               $ref: ./entities/users.yaml#/Login
+      responses:
+        200:
+          description: Login correct

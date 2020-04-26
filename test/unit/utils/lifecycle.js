@@ -1,4 +1,4 @@
-const { User, Role } = require('../../../db');
+const { User } = require('../../../db');
 
 const delay = () => new Promise((resolve) => {
   setTimeout(() => {
@@ -9,7 +9,6 @@ const delay = () => new Promise((resolve) => {
 const cleanDatabase = async () => {
   await delay();
   await User.destroy({ truncate: { cascade: true } });
-  await Role.destroy({ truncate: { cascade: true } });
 };
 
 module.exports = {

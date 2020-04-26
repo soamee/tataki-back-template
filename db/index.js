@@ -30,7 +30,6 @@ const sequelize = new Sequelize(
 
 const db = {
   User: sequelize.import('./models/user'),
-  Role: sequelize.import('./models/role'),
 };
 
 const init = async () => {
@@ -52,6 +51,6 @@ const stop = async () => sequelize.close();
 module.exports = {
   ...db,
   database: sequelize,
-  init,
+  initDatabase: init,
   stop,
 };
