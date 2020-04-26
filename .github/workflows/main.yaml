@@ -55,19 +55,19 @@ jobs:
           echo ::set-env name=DOCKER_CONTAINER_NAME::${{ secrets.DOCKER_CONTAINER_NAME }}
       - name: Build Docker Image
         run: npm run docker:build
-      - uses: jwalton/gh-ecr-push@v1.0.0
-        name: Push to Amazon ECR
-        with:
-          access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          region: eu-west-2
-          image: ${{ secrets.DOCKER_CONTAINER_NAME }}:$VERSION
-      - uses: 8398a7/action-slack@v2
-        name: Push to ECR - Notify slack
-        with:
-          status: ${{ job.status }}
-          author_name: Deploy to ECR
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        if: always()
+      # - uses: jwalton/gh-ecr-push@v1.0.0
+      #   name: Push to Amazon ECR
+      #   with:
+      #     access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     region: eu-west-2
+      #     image: ${{ secrets.DOCKER_CONTAINER_NAME }}:$VERSION
+      # - uses: 8398a7/action-slack@v2
+      #   name: Push to ECR - Notify slack
+      #   with:
+      #     status: ${{ job.status }}
+      #     author_name: Deploy to ECR
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #   if: always()
