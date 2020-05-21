@@ -19,35 +19,17 @@ exports.createToken = (user) => {
   return jwt.sign(payload, JWT_SECRET, {});
 };
 
-exports.verifyToken = (token) => new Promise((resolve, reject) => {
-  jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) {
-      logger.info('[verifyToken] error while decoding JWT token', err);
-      return reject(err);
-    }
-    return resolve(user);
-  });
-});
+exports.verifyToken = (token) => {
+  try {
+    const decodedUser = jwt.verify(token, JWT_SECRET);
+    return decodedUser;
+  } catch (err) {
+    logger.info('[verifyToken] error while decoding JWT token', err);
+    throw err;
+  }
+};
 
-exports.comparePassword = (currentPassword, candidatePassword, callback) => (
-  bcrypt.compare(candidatePassword, currentPassword, (err, isMatch) => {
-    if (err) {
-      logger.error(err);
-      return callback(err);
-    }
-    return callback(null, isMatch);
-  })
-);
-
-exports.encryptPassword = (password) => new Promise((resolve, reject) => {
-  bcrypt.hash(password, 10, (err, hash) => {
-    if (err) {
-      logger.info('[encryptPassword] error while encrypt password', err);
-      return reject(err);
-    }
-    return resolve(hash);
-  });
-});
+exports.encryptPassword = (password) => bcrypt.hash(password, 10);
 
 exports.injectUser = async (req, res, next) => {
   if (

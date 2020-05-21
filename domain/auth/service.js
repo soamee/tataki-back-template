@@ -1,74 +1,78 @@
 const _ = require('underscore');
+const bcrypt = require('bcrypt');
 const logger = require('../../components/logger')({});
 const validator = require('./validator');
 const {
   createToken,
   verifyToken,
-  comparePassword,
 } = require('../../utils/auth');
 
 module.exports = ({ db }) => {
-  const login = (args) => new Promise((resolve, reject) => {
-    const validation = validator(args);
-    if (validation.error) {
-      return reject(validation.error.details);
-    }
-    return db.User.findOne({ where: { email: args.email }, plain: true })
-      .then((user) => {
-        if (!user) {
-          logger.error('User not found');
-          return reject({
-            code: 'user.not_found',
-            message: 'Authentication failed. User not found.',
-          });
-        }
-        return comparePassword(
-          user.password,
-          args.password,
-          (err, isMatch) => {
-            if (err) {
-              return reject(err);
-            }
-            if (!isMatch) {
-              logger.error('Password is wrong');
-              return reject({
-                code: 'password.wrong',
-                message: 'Wrong password.',
-              });
-            }
-            logger.info(`User ${user.email} correctly logged in`);
-            const token = createToken({ id: user.id, email: user.email });
-            return resolve({
-              user: _.pick(user, 'id', 'email', 'firstName', 'lastName'),
-              token,
-            });
-          },
-        );
-      })
-      .catch((err) => reject(err));
-  });
+  const login = async ({ email, password }) => {
+    try {
+      const validation = validator({ email, password });
 
-  const isAuthenticated = (args) => new Promise((resolve, reject) => {
-    if (!args.token) {
-      logger.error('The user token is empty');
-      return reject({
-        code: 'token.empty',
-        message: 'The user token is empty.',
-      });
-    }
-
-    return verifyToken(args.token, (err, decoded) => {
-      if (err) {
-        logger.error('You must be authenticated');
-        return reject({
-          code: 'user.unauthenticated',
-          message: 'You must be authenticated.',
-        });
+      if (validation.error) {
+        const error = {
+          code: 'auth.login.validation',
+          message: validation.error.details,
+        };
+        throw error;
       }
 
-      return resolve(decoded);
-    });
-  });
+      const user = await db.User.findOne({ where: { email }, plain: true });
+      if (!user) {
+        const error = {
+          code: 'user.not_found',
+          message: 'Authentication failed. User not found.',
+        };
+        throw error;
+      }
+
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (!passwordMatch) {
+        logger.error('Password is wrong');
+        const error = {
+          code: 'password.wrong',
+          message: 'Wrong password.',
+        };
+        throw error;
+      }
+
+      logger.info(`User ${user.email} correctly logged in`);
+      const token = createToken({ id: user.id, email: user.email });
+      return {
+        user: _.pick(user, 'id', 'email', 'firstName', 'lastName'),
+        token,
+      };
+    } catch (err) {
+      const error = {
+        code: 'auth.login.error',
+        message: err,
+      };
+      throw error;
+    }
+  };
+
+  const isAuthenticated = async (args) => {
+    try {
+      if (!args.token) {
+        const error = {
+          code: 'token.empty',
+          message: 'The user token is empty.',
+        };
+        throw error;
+      }
+      const token = await verifyToken(args.token);
+      return token;
+    } catch (err) {
+      const error = {
+        code: 'user.unauthenticated',
+        message: 'You must be authenticated.',
+      };
+      throw error;
+    }
+  };
 
   return {
     login,
