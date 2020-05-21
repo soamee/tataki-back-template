@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { UNAUTHORIZED } = require('http-status-codes');
-
 const logger = require('../components/logger')({});
-const { JWT_SECRET } = require('../config');
+
+const { JWT_SECRET } = process.env;
 
 exports.getTokenFromRequest = (req) => (
   req.body.token || req.query.token || req.headers.authorization

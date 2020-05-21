@@ -62,6 +62,7 @@
     "cookie-parser": "~1.4.5",
     "cross-env": "^7.0.2",
     "debug": "^4.1.1",
+    "dotenv": "^8.2.0",
     "express": "~4.17.1",
     "express-openapi-validator": "^3.12.6",
     "express-pino-logger": "^4.0.0",

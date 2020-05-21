@@ -1,13 +1,19 @@
 const Sequelize = require('sequelize');
 const logger = require('../components/logger')({});
 
-const { DATABASE_LOGGING_ENABLED, ENVIRONMENT } = require('../config');
+const { DATABASE_LOGGING_ENABLED, ENVIRONMENT } = process.env;
 
 const databaseConfig = require('./config.json');
 
 let environmentConfig = databaseConfig.development;
 if (databaseConfig[ENVIRONMENT]) {
   environmentConfig = databaseConfig[ENVIRONMENT];
+}
+
+let databaseLogging = false;
+if (DATABASE_LOGGING_ENABLED === 'true') {
+  // eslint-disable-next-line no-console
+  databaseLogging = console.log;
 }
 
 const sequelize = new Sequelize(
@@ -24,7 +30,7 @@ const sequelize = new Sequelize(
       acquire: 30000,
       idle: 10000,
     },
-    logging: DATABASE_LOGGING_ENABLED,
+    logging: databaseLogging,
   },
 );
 
