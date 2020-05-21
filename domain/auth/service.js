@@ -20,7 +20,12 @@ module.exports = ({ db }) => {
         throw error;
       }
 
-      const user = await db.User.findOne({ where: { email }, plain: true });
+      const user = await db.User.findOne({
+        where: { email },
+        plain: true,
+        attributes: { include: ['password'] },
+      });
+
       if (!user) {
         const error = {
           code: 'user.not_found',
