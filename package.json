@@ -16,7 +16,7 @@
     "db:migrate:reset:test": "cross-env NODE_ENV=test npm run db:migrate:undo:test && npm run db:migrate:test",
     "db:seed:dev": "sequelize-cli db:seed:all",
     "db:seed:test": "cross-env NODE_ENV=test sequelize-cli db:seed:all",
-    "pretest": "rm -Rf reports && npm run db:migrate:reset:test",
+    "pretest": "npm run db:migrate:reset:test",
     "test": "cross-env NODE_ENV=test jest --runInBand --detectOpenHandles --coverage --coverageDirectory=reports/coverage || :",
     "test:watch": "cross-env NODE_ENV=test jest --watch",
     "posttest": "mkdir -p reports/tests && mv jest_html_reporters.html reports/tests/index.html",
@@ -101,6 +101,7 @@
     "jest-html-reporters": "^1.2.1",
     "lint-staged": "^10.1.6",
     "prettier": "^1.18.2",
+    "sequelize-cli": "^5.5.1",
     "supertest": "^4.0.2"
   },
   "lint-staged": {
