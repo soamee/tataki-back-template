@@ -5,7 +5,7 @@ const createApp = require('../app');
 const { initDatabase } = require('../db');
 const packageJSON = require('../package.json');
 
-const { ENVIRONMENT, MICROSERVICE_PORT } = process.env;
+const { ENVIRONMENT, PORT } = process.env;
 
 let port;
 let server;
@@ -59,7 +59,7 @@ const runServer = async () => {
   const app = await createApp();
   await initDatabase();
 
-  port = normalizePort(MICROSERVICE_PORT);
+  port = normalizePort(PORT);
   app.set('port', port);
 
   server = http.createServer(app);

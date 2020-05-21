@@ -11,7 +11,7 @@ if (databaseConfig[ENVIRONMENT]) {
 }
 
 let databaseLogging = false;
-if (DATABASE_LOGGING_ENABLED === 'true') {
+if (DATABASE_LOGGING_ENABLED) {
   // eslint-disable-next-line no-console
   databaseLogging = console.log;
 }
