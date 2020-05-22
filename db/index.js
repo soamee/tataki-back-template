@@ -10,6 +10,12 @@ if (databaseConfig[ENVIRONMENT]) {
   environmentConfig = databaseConfig[ENVIRONMENT];
 }
 
+let databaseLogging = false;
+if (DATABASE_LOGGING_ENABLED) {
+  // eslint-disable-next-line no-console
+  databaseLogging = console.log;
+}
+
 const sequelize = new Sequelize(
   environmentConfig.database,
   environmentConfig.username,
@@ -24,7 +30,7 @@ const sequelize = new Sequelize(
       acquire: 30000,
       idle: 10000,
     },
-    logging: DATABASE_LOGGING_ENABLED,
+    logging: databaseLogging,
   },
 );
 

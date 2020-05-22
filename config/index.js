@@ -1,18 +1,10 @@
-/* eslint-disable */
-const config = require('./default');
-const path = require("path");
+const dotenvParseVariables = require('dotenv-parse-variables');
+const dotenv = require('dotenv');
 
-let envConfig = {};
-try {
-  const configFile = path.resolve('config', `./${process.env.NODE_ENV}.json`);
-  envConfig = require(configFile);
-} catch (e) {
-  console.log(`No config found for "${process.env.NODE_ENV}", so falling back to dev.json. ${e}`);
-  envConfig = require('./dev.json');
-}
+const envFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
 
-module.exports = {
-  ...config,
-  ...envConfig,
-};
-/* eslint-enable */
+let env = dotenv.config({ path: envFile });
+
+env = dotenvParseVariables(env.parsed);
+
+module.exports = env;
