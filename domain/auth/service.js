@@ -23,6 +23,7 @@ module.exports = ({ db }) => {
       const user = await db.User.findOne({
         where: { email },
         plain: true,
+        paranoid: false,
         attributes: { include: ['password'] },
       });
 
@@ -32,6 +33,10 @@ module.exports = ({ db }) => {
           message: 'Authentication failed. User not found.',
         };
         throw error;
+      }
+
+      if (user.deletedAt) {
+        await user.restore();
       }
 
       const passwordMatch = await bcrypt.compare(password, user.password);
