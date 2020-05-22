@@ -32,6 +32,17 @@ describe('Users', () => {
     done();
   });
 
+  it('Deletes am user', async (done) => {
+    const usersResponse = await request.get('/users');
+    const userId = usersResponse.body.data[0].id;
+    const response = await request.delete(`/users/${userId}`);
+    expect(response.status).toBe(OK);
+    expect(response.body.deleted).toBe(true);
+    const deletedUserResponse = await request.get(`/users/${userId}`);
+    expect(deletedUserResponse.body).toBe(null);
+    done();
+  });
+
   it('Creates user', async (done) => {
     let response = await request
       .post('/users')

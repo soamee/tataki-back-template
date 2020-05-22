@@ -124,11 +124,37 @@ module.exports = () => {
     }
   };
 
+  const remove = async ({ id }) => {
+    try {
+      const deletedUser = await db.User.destroy({
+        where: { id },
+      });
+
+      if (deletedUser) {
+        return {
+          userId: id,
+          deleted: true,
+        };
+      }
+      return {
+        userId: id,
+        deleted: false,
+      };
+    } catch (err) {
+      const error = {
+        code: 'users.delete',
+        message: err,
+      };
+      throw error;
+    }
+  };
+
   return {
     findById,
     create,
     findAll,
     update,
     findMe,
+    remove,
   };
 };

@@ -32,6 +32,22 @@ describe('Auth', () => {
     done();
   });
 
+  it('Restore deleted user on login', async (done) => {
+    const usersResponse = await request.get('/users');
+    const userId = usersResponse.body.data[0].id;
+    const deleteUserResponse = await request.delete(`/users/${userId}`);
+    expect(deleteUserResponse.status).toBe(OK);
+    expect(deleteUserResponse.body.deleted).toBe(true);
+    const response = await request.post('/auth/login').send({
+      email: 'jmanzano@soamee.com',
+      password: '12341234',
+    });
+    expect(response.status).toBe(OK);
+    expect(response.body.token).toBeDefined();
+    expect(response.body.user.email).toBe('jmanzano@soamee.com');
+    done();
+  });
+
   it('Login with non existent user', async (done) => {
     const response = await request.post('/auth/login').send({
       email: 'jmanzan@soamee.com',

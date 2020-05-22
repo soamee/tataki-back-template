@@ -68,4 +68,12 @@ router.put('/:id', (req, res) => {
     });
 });
 
+router.delete('/:id', (req, res) => {
+  const { id } = req.params;
+  usersService
+    .remove({ id })
+    .then((deleteResponse) => res.json(deleteResponse))
+    .catch((err) => res.status(INTERNAL_SERVER_ERROR).json(err));
+});
+
 module.exports = router;
