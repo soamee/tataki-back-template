@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const Sequelize = require('sequelize');
 const logger = require('../components/logger')({});
 
@@ -34,9 +36,15 @@ const sequelize = new Sequelize(
   },
 );
 
-const db = {
-  User: sequelize.import('./models/user'),
-};
+const db = {};
+
+fs.readdirSync(`${__dirname}/models`)
+  .forEach((file) => {
+    const model = sequelize.import(`${__dirname}/models/${file}`);
+    const fileName = path.basename(file, '.js');
+    const modelName = fileName[0].toUpperCase() + fileName.slice(1);
+    db[modelName] = model;
+  });
 
 const init = async () => {
   try {
