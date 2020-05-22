@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const { UNAUTHORIZED } = require('http-status-codes');
 const logger = require('../components/logger')({});
 
 const { JWT_SECRET } = require('../config');
@@ -30,18 +29,3 @@ exports.verifyToken = (token) => {
 };
 
 exports.encryptPassword = (password) => bcrypt.hash(password, 10);
-
-exports.injectUser = async (req, res, next) => {
-  if (
-    !req.headers.authorization
-    || req.headers.authorization === undefined
-    || req.headers.authorization === 'undefined'
-  ) {
-    return res.status(UNAUTHORIZED).send();
-  }
-  const user = await exports.verifyToken(
-    req.headers.authorization.split(' ')[1],
-  );
-  req.user = user;
-  return next();
-};

@@ -8,7 +8,8 @@ const createUsersService = require('./service');
 
 const usersService = createUsersService({ db });
 
-const { injectUser } = require('../../utils/auth');
+const injectUser = require('../../components/middlewares/injectUser');
+const isAdmin = require('../../components/middlewares/isAdmin');
 
 const router = express.Router();
 
@@ -68,7 +69,7 @@ router.put('/:id', (req, res) => {
     });
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', isAdmin, (req, res) => {
   const { id } = req.params;
   usersService
     .remove({ id })

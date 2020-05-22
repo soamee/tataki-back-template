@@ -9,6 +9,7 @@ module.exports = {
         email: 'jmanzano@soamee.com',
         password:
             '$2b$10$9PGHPPwwWV.wa0uGiOVCReAONvawL4AMy4TfNaSVZHi2Dq6jJnmCm', // 12341234
+        role: 'ADMIN',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -17,6 +18,7 @@ module.exports = {
         firstName: 'Irene',
         lastName: 'Mateo',
         email: 'imateo@soamee.com',
+        role: 'REGULAR',
         password:
             '$2b$10$9PGHPPwwWV.wa0uGiOVCReAONvawL4AMy4TfNaSVZHi2Dq6jJnmCm', // 12341234
         createdAt: new Date(),

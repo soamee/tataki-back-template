@@ -1,5 +1,5 @@
 const supertest = require('supertest');
-const { OK, INTERNAL_SERVER_ERROR } = require('http-status-codes');
+const { OK, INTERNAL_SERVER_ERROR, UNAUTHORIZED } = require('http-status-codes');
 const createApp = require('../../../app');
 const db = require('../../../db');
 const seed = require('../../seed');
@@ -32,14 +32,34 @@ describe('Users', () => {
     done();
   });
 
-  it('Deletes am user', async (done) => {
+  it('Deletes an user', async (done) => {
+    const loginResponse = await request.post('/auth/login').send({
+      email: 'jmanzano@soamee.com',
+      password: '12341234',
+    });
     const usersResponse = await request.get('/users');
     const userId = usersResponse.body.data[0].id;
-    const response = await request.delete(`/users/${userId}`);
+    const response = await request
+      .delete(`/users/${userId}`)
+      .set('Authorization', `Bearer ${loginResponse.body.token}`);
     expect(response.status).toBe(OK);
     expect(response.body.deleted).toBe(true);
     const deletedUserResponse = await request.get(`/users/${userId}`);
     expect(deletedUserResponse.body).toBe(null);
+    done();
+  });
+
+  it('Cant delete an user if not an admin', async (done) => {
+    const loginResponse = await request.post('/auth/login').send({
+      email: 'imateo@soamee.com',
+      password: '12341234',
+    });
+    const usersResponse = await request.get('/users');
+    const userId = usersResponse.body.data[0].id;
+    const response = await request
+      .delete(`/users/${userId}`)
+      .set('Authorization', `Bearer ${loginResponse.body.token}`);
+    expect(response.status).toBe(UNAUTHORIZED);
     done();
   });
 
