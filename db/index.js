@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const logger = require('../components/logger')({});
 
-const { DATABASE_LOGGING_ENABLED, ENVIRONMENT } = process.env;
+const { DATABASE_LOGGING_ENABLED, ENVIRONMENT } = require('../config');
 
 const databaseConfig = require('./config.json');
 

@@ -2,7 +2,7 @@ const express = require('express');
 
 const { name, version } = require('../../package.json');
 
-const { ENVIRONMENT } = process.env;
+const { ENVIRONMENT } = require('../../config');
 
 const router = express.Router();
 
