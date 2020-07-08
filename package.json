@@ -7,8 +7,6 @@
     "start:test": "cross-env NODE_ENV=test nodemon LOG_LEVEL=debug ./bin/www | pino-colada",
     "start:staging": "cross-env NODE_ENV=staging nodemon LOG_LEVEL=debug ./bin/www | pino-colada",
     "start:production": "cross-env NODE_ENV=production nodemon LOG_LEVEL=debug ./bin/www | pino-colada",
-    "db:start": "docker run -e POSTGRES_USER=vendor -e POSTGRES_DB=vendordev -e POSTGRES_PASSWORD=test -e ALLOW_IP_RANGE=0.0.0.0/0 -v $(pwd)/pgdata:/var/lib/postgresql/data -ti -p 5432:5432 postgres",
-    "db:start:test": "docker run -e POSTGRES_USER=vendor -e POSTGRES_DB=vendortest -e POSTGRES_PASSWORD=test -e ALLOW_IP_RANGE=0.0.0.0/0 -ti -p 5433:5432 postgres",
     "db:migrate": "NODE_ENV=development sequelize-cli db:migrate",
     "db:migrate:test": "cross-env NODE_ENV=test sequelize-cli db:migrate",
     "db:migrate:reset": "sequelize-cli db:migrate:undo:all && npm run db:migrate",
