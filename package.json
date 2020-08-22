@@ -3,6 +3,7 @@
   "version": "0.6.2",
   "private": true,
   "scripts": {
+    "start": "node ./bin/www | pino-colada",
     "start:dev": "cross-env NODE_ENV=development nodemon LOG_LEVEL=debug ./bin/www | pino-colada",
     "start:test": "cross-env NODE_ENV=test nodemon LOG_LEVEL=debug ./bin/www | pino-colada",
     "start:staging": "cross-env NODE_ENV=staging nodemon LOG_LEVEL=debug ./bin/www | pino-colada",
