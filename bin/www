@@ -59,7 +59,7 @@ const runServer = async () => {
   const app = await createApp();
   await initDatabase();
 
-  port = normalizePort(PORT || 3400);
+  port = normalizePort(process.env.PORT || PORT);
   app.set('port', port);
 
   server = http.createServer(app);
