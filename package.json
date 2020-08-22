@@ -1,6 +1,6 @@
 {
   "name": "covid19",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "private": true,
   "scripts": {
     "start": "node ./bin/www | pino-colada",
