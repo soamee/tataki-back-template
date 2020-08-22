@@ -5,6 +5,8 @@ const envFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
 
 let env = dotenv.config({ path: envFile });
 
-env = dotenvParseVariables(env.parsed);
+if (env.parsed) {
+  env = dotenvParseVariables(env.parsed);
+}
 
 module.exports = env;
