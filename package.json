@@ -10,6 +10,8 @@
     "start:production": "cross-env NODE_ENV=production nodemon LOG_LEVEL=debug ./bin/www | pino-colada",
     "db:migrate": "NODE_ENV=development sequelize-cli db:migrate",
     "db:migrate:test": "cross-env NODE_ENV=test sequelize-cli db:migrate",
+    "db:migrate:staging": "cross-env NODE_ENV=staging sequelize-cli db:migrate",
+    "db:migrate:production": "cross-env NODE_ENV=production sequelize-cli db:migrate",
     "db:migrate:reset": "sequelize-cli db:migrate:undo:all && npm run db:migrate",
     "db:migrate:undo:test": "cross-env NODE_ENV=test sequelize-cli db:migrate:undo:all",
     "db:migrate:reset:test": "cross-env NODE_ENV=test npm run db:migrate:undo:test && npm run db:migrate:test",
