@@ -1,7 +1,7 @@
 const dotenvParseVariables = require('dotenv-parse-variables');
 const dotenv = require('dotenv');
 
-const envFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
+const envFile = `.env.${process.env.NODE_ENV}`;
 
 let env = dotenv.config({ path: envFile });
 
