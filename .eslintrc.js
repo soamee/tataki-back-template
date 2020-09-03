@@ -25,6 +25,7 @@ module.exports = {
     'global-require': 0,
     'no-console': 2,
     'prefer-promise-reject-errors': 0,
+    'no-await-in-loop': 0,
   },
   overrides: [
     {
