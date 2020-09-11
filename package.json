@@ -24,6 +24,7 @@
     "test:watch": "cross-env NODE_ENV=test jest --watch",
     "posttest": "mkdir -p reports/tests && mv jest_html_reporters.html reports/tests/index.html",
     "lint": "lint-staged",
+    "lint:fix": "npx eslint . --fix",
     "infra:up": "docker-compose up -d",
     "infra:down": "docker-compose down",
     "docker:build": ". ./ci/extract-version.sh && echo $VERSION && docker build -t $DOCKER_CONTAINER_NAME:$VERSION .",
