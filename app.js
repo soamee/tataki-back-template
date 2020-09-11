@@ -4,6 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const cors = require('express-rate-limit');
 const { OpenApiValidator } = require('express-openapi-validator');
 
 const logger = require('./components/logger')({});
@@ -20,6 +21,7 @@ const createApp = async () => {
   app.set('views', path.join(__dirname, 'views'));
   app.set('view engine', 'jade');
 
+  app.use(cors());
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
