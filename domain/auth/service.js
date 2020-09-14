@@ -29,7 +29,7 @@ module.exports = ({ db }) => {
 
       if (!user) {
         const error = {
-          code: 'user.not_found',
+          code: 'auth.login.notFound',
           message: 'Authentication failed. User not found.',
         };
         throw error;
@@ -43,7 +43,7 @@ module.exports = ({ db }) => {
       if (!passwordMatch) {
         logger.error('Password is wrong');
         const error = {
-          code: 'password.wrong',
+          code: 'auth.login.passwordWrong',
           message: 'Wrong password.',
         };
         throw error;
