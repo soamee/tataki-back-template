@@ -20,7 +20,7 @@
     "db:seed:test": "cross-env NODE_ENV=test sequelize-cli db:seed:undo:all && cross-env NODE_ENV=test sequelize-cli db:seed:all --debug",
     "pretest": "rm -Rf reports && npm run db:migrate:reset:test",
     "test": "cross-env NODE_ENV=test jest --runInBand --detectOpenHandles --coverage --coverageDirectory=reports/coverage || :",
-    "test:file": "cross-env NODE_ENV=test jest --testNamePattern",
+    "test:spec": "cross-env NODE_ENV=test jest --testNamePattern",
     "test:watch": "cross-env NODE_ENV=test jest --watch",
     "posttest": "mkdir -p reports/tests && mv jest_html_reporters.html reports/tests/index.html",
     "lint": "lint-staged",
