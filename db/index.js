@@ -46,6 +46,25 @@ fs.readdirSync(`${__dirname}/models`)
     db[modelName] = model;
   });
 
+/* eslint-disable */
+const printAssociationsForModel = modelName => {
+  console.log('model -> ', modelName);
+  console.log('=======================');
+  const model = db[modelName];
+  for (const assoc of Object.keys(model.associations)) {
+    for (const accessor of Object.keys(model.associations[assoc].accessors)) {
+      console.log(
+        `${model.name}.${model.associations[assoc].accessors[accessor]}()`
+      );
+    }
+  }
+  if (!Object.keys(model.associations).length) {
+    console.log('No associations available yet');
+  }
+  console.log('=======================\n');
+};
+/* eslint-enable */
+
 const init = async () => {
   try {
     await sequelize.authenticate();
@@ -54,6 +73,7 @@ const init = async () => {
       if (db[modelName].associate) {
         db[modelName].associate(db);
       }
+      printAssociationsForModel(modelName);
     });
   } catch (err) {
     logger.error(`Unable to connect to the database: ${err}`);
