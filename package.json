@@ -1,6 +1,6 @@
 {
   "name": "api",
-  "version": "0.6.16",
+  "version": "0.6.17",
   "private": true,
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./bin/www | pino-colada",
