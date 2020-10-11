@@ -33,7 +33,8 @@
     "docker:build:major": "npm version major && git add . && git commit -m \"release(): major version\"  && source ./ci/extract-version.sh && echo $VERSION && docker build -t $DOCKER_CONTAINER_NAME:$VERSION .",
     "docker:tag-and-push": "source ../ci/extract-version.sh && docker tag $DOCKER_CONTAINER_NAME:$VERSION jmanzanomorilla/$DOCKER_CONTAINER_NAME:$VERSION && docker push jmanzanomorilla/$DOCKER_CONTAINER_NAME:$VERSION",
     "docker:run": "source ../ci/extract-version.sh && docker run -it -p 8080:80 $DOCKER_CONTAINER_NAME:$VERSION",
-    "docker:release:patch": "yarn docker:build:patch && yarn docker:tag-and-push"
+    "docker:release:patch": "yarn docker:build:patch && yarn docker:tag-and-push",
+    "heroku-postbuild": "yarn db:migrate:production"
   },
   "husky": {
     "hooks": {
