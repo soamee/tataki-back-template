@@ -151,8 +151,8 @@ module.exports = () => {
     }
   };
 
-  const changePassword = async ({ userToChangePassword, data }) => {
-    const { id } = userToChangePassword;
+  const changePassword = async ({ user, data }) => {
+    const { id } = user;
     const { oldPassword, password, email } = data;
     try {
       const foundUserWithPassword = await db.User.findOne({

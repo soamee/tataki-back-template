@@ -89,6 +89,60 @@ describe('Users', () => {
     done();
   });
 
+  it('Changes password and login with new password', async (done) => {
+    const loginResponse = await request
+      .post('/auth/login')
+      .send({
+        email: 'jmanzano@soamee.com',
+        password: '12341234',
+      });
+    const response = await request
+      .put('/users/change-password')
+      .send({ email: 'jmanzano@soamee.com', password: '1919', oldPassword: '12341234' })
+      .set('Authorization', `Bearer ${loginResponse.body.token}`);
+    expect(response.status).toBe(OK);
+    const newLoginResponse = await request
+      .post('/auth/login')
+      .send({
+        email: 'jmanzano@soamee.com',
+        password: '1919',
+      });
+    expect(newLoginResponse.status).toBe(OK);
+    done();
+  });
+
+  it('Fails changing password because e-mail does not correspond to the user e-mail', async (done) => {
+    const loginResponse = await request
+      .post('/auth/login')
+      .send({
+        email: 'jmanzano@soamee.com',
+        password: '12341234',
+      });
+    const response = await request
+      .put('/users/change-password')
+      .send({ email: 'imateo@soamee.com', password: '1919', oldPassword: '12341234' })
+      .set('Authorization', `Bearer ${loginResponse.body.token}`);
+    expect(response.status).toBe(INTERNAL_SERVER_ERROR);
+    expect(response.body.message.message).toBe('The email does not correspond to the users email');
+    done();
+  });
+
+  it('Fails changing password because old password does not match', async (done) => {
+    const loginResponse = await request
+      .post('/auth/login')
+      .send({
+        email: 'jmanzano@soamee.com',
+        password: '12341234',
+      });
+    const response = await request
+      .put('/users/change-password')
+      .send({ email: 'jmanzano@soamee.com', password: '1919', oldPassword: '12345678' })
+      .set('Authorization', `Bearer ${loginResponse.body.token}`);
+    expect(response.status).toBe(INTERNAL_SERVER_ERROR);
+    expect(response.body.message.message).toBe('Password does not match');
+    done();
+  });
+
   afterEach(async (done) => {
     await truncate();
     done();
