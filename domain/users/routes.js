@@ -13,6 +13,17 @@ const isAdmin = require('../../components/middlewares/isAdmin');
 
 const router = express.Router();
 
+router.put('/change-password', injectUser, (req, res) => {
+  const { body, user } = req;
+  usersService
+    .changePassword({ data: body, user })
+    .then((result) => res.json(result))
+    .catch((err) => {
+      logger.error(err);
+      res.status(INTERNAL_SERVER_ERROR).json(err);
+    });
+});
+
 router.get('/me', injectUser, (req, res) => {
   const { id } = req.user;
   usersService

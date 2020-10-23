@@ -1,5 +1,7 @@
 const Sequelize = require('sequelize');
 
+const bcrypt = require('bcrypt');
+
 const logger = require('../../components/logger')({});
 
 const { createValidator, updateValidator } = require('./validator');
@@ -149,6 +151,44 @@ module.exports = () => {
     }
   };
 
+  const changePassword = async ({ user, data }) => {
+    const { id } = user;
+    const { oldPassword, password, email } = data;
+    try {
+      const foundUserWithPassword = await db.User.findOne({
+        where: { id },
+        plain: true,
+        attributes: { include: ['password'] },
+      });
+      if (email !== foundUserWithPassword.email) {
+        const error = {
+          code: 'users.not_found',
+          message: 'The email does not correspond to the users email',
+        };
+        throw error;
+      }
+      const passwordMatch = await bcrypt.compare(oldPassword, foundUserWithPassword.password);
+      if (!passwordMatch) {
+        const error = {
+          code: 'users.changePassword',
+          message: 'Password does not match',
+        };
+        throw error;
+      }
+      const encriptedNewPassword = await encryptPassword(password);
+      const updatedUser = await foundUserWithPassword.update({
+        password: encriptedNewPassword,
+      });
+      return updatedUser;
+    } catch (err) {
+      const error = {
+        code: 'users.changePassword',
+        message: err,
+      };
+      throw error;
+    }
+  };
+
   return {
     findById,
     create,
@@ -156,5 +196,6 @@ module.exports = () => {
     update,
     findMe,
     remove,
+    changePassword,
   };
 };
