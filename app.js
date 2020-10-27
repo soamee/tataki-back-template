@@ -4,7 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const cors = require('express-rate-limit');
+const cors = require('cors');
 const { OpenApiValidator } = require('express-openapi-validator');
 
 const logger = require('./components/logger')({});
