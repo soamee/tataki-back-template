@@ -25,11 +25,6 @@ const createApp = async () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
-
-  app.use('/health', healthRoutes);
-  app.use('/users', usersRoutes);
-  app.use('/auth', authRoutes);
-
   await new OpenApiValidator({
     validateRequests: true,
     validateResponses: true,
@@ -41,6 +36,10 @@ const createApp = async () => {
     windowMs: 15 * 60 * 1000,
     max: 400,
   }));
+
+  app.use('/health', healthRoutes);
+  app.use('/users', usersRoutes);
+  app.use('/auth', authRoutes);
 
   app.use((req, res, next) => {
     next(createError(404));
