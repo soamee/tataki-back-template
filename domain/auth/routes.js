@@ -8,12 +8,14 @@ const authService = createAuthService({ db });
 
 const router = express.Router();
 
-router.post('/login', (req, res) => {
-  const { email, password } = req.body;
-  authService
-    .login({ email, password })
-    .then((user) => res.json(user))
-    .catch((error) => res.status(UNAUTHORIZED).json({ message: error }));
+router.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await authService.login({ email, password });
+    return res.json(user);
+  } catch (err) {
+    return res.status(UNAUTHORIZED).json({ message: err });
+  }
 });
 
 module.exports = router;

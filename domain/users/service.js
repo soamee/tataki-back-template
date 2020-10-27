@@ -101,7 +101,7 @@ module.exports = () => {
     }
   };
 
-  const update = async (id, body) => {
+  const update = async ({ id, body }) => {
     const validation = updateValidator(body);
     if (validation.error) {
       const error = {
