@@ -11,42 +11,6 @@ info:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
 paths:
-  /users:
-    get:
-      description: Returns all uses
-      responses:
-        200:
-          description: User response
-          content:
-            application/json:
-              schema:
-                $ref: ./entities/users.yaml#/UsersList
-    post:
-      summary: Add a new pet
-      requestBody:
-        description: Optional description in *Markdown*
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: ./entities/users.yaml#/UsersList
-      responses:
-        '201':
-          description: Created
-  /users/{userId}:
-    delete:
-      description: deletes a single user based on the ID supplied
-      parameters:
-        - name: userId
-          in: path
-          description: ID of user to delete
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        200:
-          description: user deleted
   /health:
     get:
       description: Health endpoint
@@ -61,12 +25,131 @@ paths:
     post:
       description: Login endpoint
       requestBody:
-        description: User to lofin with
         required: true
         content:
           application/json:
             schema:
-               $ref: ./entities/users.yaml#/Login
+                $ref: ./entities/users.yaml#/Login
       responses:
         200:
-          description: Login correct
+          description: Login response
+          content:
+            application/json:
+              schema:
+                $ref: ./responses/users.yaml#/Login
+  /users:
+    get:
+      description: Users endpoint
+      parameters:
+        - name: email
+          in: query
+          description: ID of user to return
+          schema:
+            type: string
+      responses:
+        200:
+          description: User response
+          content:
+            application/json:
+              schema:
+                $ref: ./responses/users.yaml#/UsersList
+    post:
+      description: Users endpoint
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./entities/users.yaml#/CreateUser
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: ./entities/users.yaml#/BaseUser
+  /users/change-password:
+    put:
+      description: Users endpoint
+      requestBody:
+        description: New password
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./entities/users.yaml#/ChangePassword
+      responses:
+        200:
+          description: Return an updated user
+          content:
+            application/json:
+              schema:
+                $ref: ./entities/users.yaml#/BaseUser
+  /users/me:
+    get:
+      description: Users endpoint
+      responses:
+        200:
+          description: Returns a single user based on the ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: ./entities/users.yaml#/BaseUser
+  /users/{userId}:
+    get:
+      description: Users endpoint
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Returns a single user based on the ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: ./entities/users.yaml#/BaseUser
+    put:
+      description: Users endpoint
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./entities/users.yaml#/UpdateUser
+      responses:
+        200:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: ./entities/users.yaml#/BaseUser
+    delete:
+      description: Users endpoint
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: user deleted
+          content:
+            application/json:
+              schema:
+                $ref: ./responses/users.yaml#/DeletedUser

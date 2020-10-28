@@ -4,8 +4,6 @@ const bcrypt = require('bcrypt');
 
 const logger = require('../../components/logger')({});
 
-const { createValidator, updateValidator } = require('./validator');
-
 const db = require('../../db');
 
 const { encryptPassword } = require('../../utils/auth');
@@ -40,6 +38,11 @@ module.exports = () => {
       const user = await db.User.findOne({
         where: { id },
       });
+
+      if (!user) {
+        throw Error('This user was deleted or does not exists');
+      }
+
       return user;
     } catch (err) {
       const error = {
@@ -67,14 +70,6 @@ module.exports = () => {
 
   const create = async ({ userToBeCreated }) => {
     try {
-      const validation = createValidator(userToBeCreated);
-      if (validation.error) {
-        const error = {
-          code: 'users.validation',
-          message: validation.error.details,
-        };
-        throw error.message;
-      }
       const user = await db.User.findOne({
         where: { email: userToBeCreated.email },
       });
@@ -94,7 +89,7 @@ module.exports = () => {
       return newUser;
     } catch (err) {
       const error = {
-        code: 'user.login.error',
+        code: 'user.create.error',
         message: err,
       };
       throw error;
@@ -102,14 +97,6 @@ module.exports = () => {
   };
 
   const update = async ({ id, body }) => {
-    const validation = updateValidator(body);
-    if (validation.error) {
-      const error = {
-        code: 'user.validation',
-        message: validation.error.details,
-      };
-      throw error;
-    }
     try {
       const updatedUser = await db.User.update(body, {
         where: { id },
