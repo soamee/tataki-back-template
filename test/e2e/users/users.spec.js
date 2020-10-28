@@ -1,5 +1,7 @@
 const supertest = require('supertest');
-const { OK, INTERNAL_SERVER_ERROR, UNAUTHORIZED } = require('http-status-codes');
+const {
+  OK, INTERNAL_SERVER_ERROR, UNAUTHORIZED, BAD_REQUEST, CREATED,
+} = require('http-status-codes');
 const createApp = require('../../../app');
 const db = require('../../../db');
 const seed = require('../../seed');
@@ -45,7 +47,7 @@ describe('Users', () => {
     expect(response.status).toBe(OK);
     expect(response.body.deleted).toBe(true);
     const deletedUserResponse = await request.get(`/users/${userId}`);
-    expect(deletedUserResponse.body).toBe(null);
+    expect(deletedUserResponse.body.message).toBe('Error while finding user Error: This user was deleted or does not exists');
     done();
   });
 
@@ -72,7 +74,7 @@ describe('Users', () => {
         firstName: 'Other',
         lastName: 'Hey',
       });
-    expect(response.status).toBe(OK);
+    expect(response.status).toBe(CREATED);
     expect(response.body.email).toBe('jmanza@soamee.com');
 
     response = await request.get('/users');
@@ -85,7 +87,7 @@ describe('Users', () => {
     const response = await request
       .post('/users')
       .send({ password: '121234', firstName: 'Other', lastName: 'Hey' });
-    expect(response.status).toBe(INTERNAL_SERVER_ERROR);
+    expect(response.status).toBe(BAD_REQUEST);
     done();
   });
 

@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const cors = require('cors');
-const { OpenApiValidator } = require('express-openapi-validator');
+const OpenApiValidator = require('express-openapi-validator');
 
 const logger = require('./components/logger')({});
 const configureExpressLogger = require('./components/network-logger');
@@ -25,11 +25,13 @@ const createApp = async () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
-  await new OpenApiValidator({
-    validateRequests: true,
-    validateResponses: true,
-    apiSpec: './api-docs/api.yaml',
-  }).install(app);
+  app.use(
+    OpenApiValidator.middleware({
+      apiSpec: './api-docs/api.yaml',
+      validateRequests: true,
+      validateResponses: true,
+    }),
+  );
   logger.info('Swagger API validation correctly initialized');
   app.use(helmet());
   app.use(rateLimit({
@@ -40,6 +42,14 @@ const createApp = async () => {
   app.use('/health', healthRoutes);
   app.use('/users', usersRoutes);
   app.use('/auth', authRoutes);
+
+  // eslint-disable-next-line no-unused-vars
+  app.use((err, req, res, next) => {
+    res.status(err.status || 500).json({
+      message: err.message,
+      errors: err.errors,
+    });
+  });
 
   app.use((req, res, next) => {
     next(createError(404));

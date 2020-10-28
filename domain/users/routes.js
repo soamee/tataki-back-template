@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { INTERNAL_SERVER_ERROR } = require('http-status-codes');
+const { INTERNAL_SERVER_ERROR, CREATED } = require('http-status-codes');
 
 const logger = require('../../components/logger')({});
 const db = require('../../db');
@@ -61,7 +61,7 @@ router.post('/', async (req, res) => {
   try {
     const { body } = req;
     const user = await usersService.create({ userToBeCreated: body });
-    return res.json(user);
+    return res.status(CREATED).json(user);
   } catch (err) {
     logger.error(err);
     return res.status(INTERNAL_SERVER_ERROR).json(err);

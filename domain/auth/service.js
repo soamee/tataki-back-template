@@ -1,7 +1,6 @@
 const _ = require('underscore');
 const bcrypt = require('bcrypt');
 const logger = require('../../components/logger')({});
-const validator = require('./validator');
 const {
   createToken,
   verifyToken,
@@ -10,16 +9,6 @@ const {
 module.exports = ({ db }) => {
   const login = async ({ email, password }) => {
     try {
-      const validation = validator({ email, password });
-
-      if (validation.error) {
-        const error = {
-          code: 'auth.login.validation',
-          message: validation.error.details,
-        };
-        throw error;
-      }
-
       const user = await db.User.findOne({
         where: { email },
         plain: true,

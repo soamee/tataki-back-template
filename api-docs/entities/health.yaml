@@ -12,8 +12,8 @@ Metadata:
     version:
       type: string
     uptime:
-      type: string
+      type: number
     message:
       type: string
     timestamp:
-      type: string
+      type: number
