@@ -21,6 +21,9 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '10.x'
+      - name: set insecure variable
+        run: |
+          echo "ACTIONS_ALLOW_UNSECURE_COMMANDS=true" >> $GITHUB_ENV
       - name: Install dependencies
         run: |
           npm install
