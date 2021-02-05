@@ -87,6 +87,7 @@
     "pino": "^6.2.0",
     "pino-colada": "^1.6.1",
     "pino-pretty": "^4.0.0",
+    "prettier": "^1.18.2",
     "sequelize": "^5.21.6",
     "sqlite3": "^4.1.1",
     "underscore": "^1.10.2"
@@ -107,7 +108,6 @@
     "jest": "^25.3.0",
     "jest-html-reporters": "^1.2.1",
     "lint-staged": "^10.1.6",
-    "prettier": "^1.18.2",
     "sequelize-cli": "^5.5.1",
     "supertest": "^4.0.2"
   },
